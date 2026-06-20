@@ -276,17 +276,17 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [x] **Test**: seed script is idempotent (running it twice doesn't duplicate rows or error)
 
 ### Phase 2 — Probe Worker
-- [ ] Build probe runner: HTTP request to endpoint, capture status code, latency, success boolean
-- [ ] Distinguish error types in `error_message`: timeout, DNS failure, TLS failure, non-2xx status
-- [ ] Define and implement the "down" policy: require 2 consecutive failed probes before a probe window counts as downtime (avoid false positives from one transient blip)
-- [ ] Build scheduler honoring each endpoint's `probe_interval_seconds`
-- [ ] Persist results to `probes` table
-- [ ] Deploy as a Render Cron Job (every 1–5 min depending on tightest `probe_interval_seconds` in use)
-- [ ] **Test**: probe runner records success + latency for a mocked healthy endpoint (mock with `msw` or `nock`)
-- [ ] **Test**: probe runner records failure + correct `error_message` for a mocked timeout
-- [ ] **Test**: probe runner records failure + correct `error_message` for a mocked 500 response
-- [ ] **Test**: scheduler does not re-probe an endpoint before its interval has elapsed
-- [ ] **Test**: the "2 consecutive failures" policy does not flag a single isolated failure as downtime, but does flag two in a row
+- [x] Build probe runner: HTTP request to endpoint, capture status code, latency, success boolean
+- [x] Distinguish error types in `error_message`: timeout, DNS failure, TLS failure, non-2xx status
+- [x] Define and implement the "down" policy: require 2 consecutive failed probes before a probe window counts as downtime (avoid false positives from one transient blip)
+- [x] Build scheduler honoring each endpoint's `probe_interval_seconds`
+- [x] Persist results to `probes` table
+- [ ] Deploy as a Render Cron Job (every 1–5 min depending on tightest `probe_interval_seconds` in use) — **deferred to Phase 8 deployment**
+- [x] **Test**: probe runner records success + latency for a mocked healthy endpoint (mock with `msw` or `nock`)
+- [x] **Test**: probe runner records failure + correct `error_message` for a mocked timeout
+- [x] **Test**: probe runner records failure + correct `error_message` for a mocked 500 response
+- [x] **Test**: scheduler does not re-probe an endpoint before its interval has elapsed
+- [x] **Test**: the "2 consecutive failures" policy does not flag a single isolated failure as downtime, but does flag two in a row
 
 ### Phase 3 — Aggregation & SLA Evaluation Engine
 - [ ] Write aggregation function: `computeUptimePct(probes[]) -> number`, `computeP95Latency(probes[]) -> number`

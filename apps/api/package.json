@@ -7,8 +7,8 @@
     "dev": "tsx watch src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "worker": "tsx src/worker.ts",
-    "evaluator": "tsx src/evaluator.ts",
+    "worker": "tsx src/worker/index.ts",
+    "evaluator": "tsx src/evaluator/index.ts",
     "db:migrate": "tsx src/migrate.ts",
     "db:seed": "tsx src/seed.ts",
     "lint": "eslint src --ext .ts",
@@ -16,22 +16,23 @@
     "test": "vitest"
   },
   "dependencies": {
-    "fastify": "^4.25.2",
     "@fastify/cors": "^8.5.0",
     "@fastify/rate-limit": "^9.1.0",
     "@supabase/supabase-js": "^2.39.0",
+    "dotenv": "^16.3.1",
     "ethers": "^6.10.0",
-    "zod": "^3.22.4",
-    "dotenv": "^16.3.1"
+    "fastify": "^4.25.2",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "typescript": "^5.3.3",
-    "tsx": "^4.7.0",
-    "vitest": "^1.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
     "@vitest/ui": "^1.2.0",
     "eslint": "^8.56.0",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0"
+    "msw": "^2.14.6",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.0"
   }
 }

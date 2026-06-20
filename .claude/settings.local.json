@@ -6,7 +6,11 @@
       "Bash(pnpm typecheck *)",
       "Bash(pnpm test *)",
       "Bash(pnpm compile *)",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(pnpm add *)",
+      "Bash(claude mcp *)",
+      "Bash(git commit *)"
     ]
   }
 }
