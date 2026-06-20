@@ -37,8 +37,9 @@ export default function LoginPage() {
       if (data.session) {
         router.push('/dashboard')
       }
-    } catch (err: any) {
-      setError(err.message || 'Login failed')
+    } catch (err) {
+      const error = err as Error
+      setError(error.message || 'Login failed')
     } finally {
       setLoading(false)
     }
@@ -102,7 +103,7 @@ export default function LoginPage() {
           </form>
 
           <p className="mt-6 text-center text-sm text-muted-text">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-link hover:underline">
               Sign up
             </Link>

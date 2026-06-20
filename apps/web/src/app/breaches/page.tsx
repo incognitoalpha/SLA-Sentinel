@@ -40,7 +40,8 @@ export default function BreachesPage() {
           .single()
 
         if (profile?.organizations) {
-          setOrgName((profile.organizations as any).name || 'Demo Corp')
+          const orgs = profile.organizations as unknown as { name: string }[]
+          setOrgName(orgs[0]?.name || 'Demo Corp')
         }
 
         // Fetch breaches
@@ -83,8 +84,9 @@ export default function BreachesPage() {
         )
 
         setBreaches(breachesWithDetails)
-      } catch (err: any) {
-        setError(err.message || 'Failed to load breaches')
+      } catch (err) {
+        const error = err as Error
+        setError(error.message || 'Failed to load breaches')
       } finally {
         setLoading(false)
       }

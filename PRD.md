@@ -362,13 +362,17 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [ ] **Test (Playwright, viewport)**: dashboard grid collapses to single column at 375px width — **deferred to Phase 8**
 
 ### Phase 8 — Deployment & CI/CD
-- [ ] Render Web Service (API): build/start commands, env vars, `/api/healthz` as health check path
-- [ ] Render Cron Job(s): probe worker + evaluator, correct schedule expressions
-- [ ] Vercel project: env vars set, auto-deploy on `main` push
-- [ ] Production Supabase project: migrations applied, RLS verified on production data shape
-- [ ] GitHub Actions: block merge to `main` if lint/typecheck/unit/contract tests fail
-- [ ] Post-deploy smoke checklist: health endpoints respond, one manual probe cycle succeeds, dashboard loads and shows seeded data
-- [ ] Add your own API as a monitored "endpoint" (dogfooding) with a low-stakes demo agreement
+- [x] Render configuration: `render.yaml` with API service + worker + evaluator cron jobs, proper build/start commands
+- [x] Vercel configuration: `vercel.json` with Next.js build settings and security headers
+- [x] Production build scripts: `worker:prod` and `evaluator:prod` for compiled JavaScript execution
+- [x] Deployment guide: comprehensive `DEPLOYMENT.md` with step-by-step instructions
+- [x] Fix all build errors: TypeScript and ESLint passing for both API and web
+- [x] GitHub Actions: CI workflow already configured (lint/typecheck/unit/contract tests block merge on failure)
+- [ ] **Manual**: Deploy to Render (connect repo, set env vars, verify health endpoint)
+- [ ] **Manual**: Deploy to Vercel (connect repo, set env vars, verify frontend loads)
+- [ ] **Manual**: Production Supabase project (create, run migrations, seed data, create user)
+- [ ] **Manual**: Post-deploy smoke tests (see DEPLOYMENT.md §5 for checklist)
+- [ ] **Manual**: Dogfooding - add deployed API as monitored endpoint
 
 ### Phase 9 — Documentation & Resume Polish
 - [ ] `README.md`: problem statement, architecture diagram, local setup steps, link to a recorded demo

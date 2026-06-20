@@ -45,7 +45,8 @@ export default function ProviderDetailPage() {
           .single()
 
         if (profile?.organizations) {
-          setOrgName((profile.organizations as any).name || 'Demo Corp')
+          const orgs = profile.organizations as unknown as { name: string }[]
+          setOrgName(orgs[0]?.name || 'Demo Corp')
         }
 
         // Fetch provider with endpoints
@@ -67,8 +68,9 @@ export default function ProviderDetailPage() {
             setProbes(probesData)
           }
         }
-      } catch (err: any) {
-        setError(err.message || 'Failed to load provider')
+      } catch (err) {
+        const error = err as Error
+        setError(error.message || 'Failed to load provider')
       } finally {
         setLoading(false)
       }
@@ -151,7 +153,6 @@ export default function ProviderDetailPage() {
               {provider.endpoints.map((endpoint) => {
                 const endpointProbes = probes.filter(p => p.endpoint_id === endpoint.id)
                 const latestProbe = endpointProbes[0]
-                const recentSuccess = endpointProbes.slice(0, 5).filter(p => p.success).length
                 const successRate = endpointProbes.length > 0
                   ? (endpointProbes.filter(p => p.success).length / Math.min(endpointProbes.length, 20) * 100).toFixed(1)
                   : 'N/A'

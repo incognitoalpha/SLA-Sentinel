@@ -1,0 +1,78 @@
+# Render Blueprint - SLA Sentinel
+# Deploys API server + Worker + Evaluator cron jobs
+
+services:
+  # API Web Service
+  - type: web
+    name: sla-sentinel-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd apps/api && pnpm install && pnpm build
+    startCommand: cd apps/api && pnpm start
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3002
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SEPOLIA_RPC_URL
+        sync: false
+      - key: ORACLE_PRIVATE_KEY
+        sync: false
+      - key: SLA_ESCROW_CONTRACT_ADDRESS
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: WEBHOOK_SIGNING_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://sla-sentinel.vercel.app
+
+  # Probe Worker - Cron Job (every 5 minutes)
+  - type: cron
+    name: sla-sentinel-worker
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd apps/api && pnpm install && pnpm build
+    startCommand: cd apps/api && pnpm worker:prod
+    schedule: "*/5 * * * *"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+
+  # Evaluator - Cron Job (every hour)
+  - type: cron
+    name: sla-sentinel-evaluator
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd apps/api && pnpm install && pnpm build
+    startCommand: cd apps/api && pnpm evaluator:prod
+    schedule: "0 * * * *"
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SEPOLIA_RPC_URL
+        sync: false
+      - key: ORACLE_PRIVATE_KEY
+        sync: false
+      - key: SLA_ESCROW_CONTRACT_ADDRESS
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: WEBHOOK_SIGNING_SECRET
+        sync: false

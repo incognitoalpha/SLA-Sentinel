@@ -50,7 +50,7 @@ const demoRoutes: FastifyPluginAsync = async (fastify) => {
       try {
         await runEvaluations()
       } catch (error) {
-        fastify.log.error('Evaluation failed:', error)
+        fastify.log.error({ error }, 'Evaluation failed')
       }
     })
 

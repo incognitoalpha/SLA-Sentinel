@@ -36,7 +36,8 @@ export default function AgreementDetailPage() {
           .single()
 
         if (profile?.organizations) {
-          setOrgName((profile.organizations as any).name || 'Demo Corp')
+          const orgs = profile.organizations as unknown as { name: string }[]
+          setOrgName(orgs[0]?.name || 'Demo Corp')
         }
 
         // Fetch agreement detail
@@ -50,8 +51,9 @@ export default function AgreementDetailPage() {
         // Fetch breaches
         const breachesData = await apiClient.getAgreementBreaches(agreementId)
         setBreaches(breachesData)
-      } catch (err: any) {
-        setError(err.message || 'Failed to load agreement')
+      } catch (err) {
+        const error = err as Error
+        setError(error.message || 'Failed to load agreement')
       } finally {
         setLoading(false)
       }

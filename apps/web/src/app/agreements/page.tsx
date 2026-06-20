@@ -36,7 +36,8 @@ export default function AgreementsPage() {
           .single()
 
         if (profile?.organizations) {
-          setOrgName((profile.organizations as any).name || 'Demo Corp')
+          const orgs = profile.organizations as unknown as { name: string }[]
+          setOrgName(orgs[0]?.name || 'Demo Corp')
         }
 
         // Fetch agreements
@@ -63,8 +64,9 @@ export default function AgreementsPage() {
         )
 
         setAgreements(agreementsWithProviders)
-      } catch (err: any) {
-        setError(err.message || 'Failed to load agreements')
+      } catch (err) {
+        const error = err as Error
+        setError(error.message || 'Failed to load agreements')
       } finally {
         setLoading(false)
       }
