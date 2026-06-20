@@ -46,7 +46,7 @@ const agreementsRoutes: FastifyPluginAsync = async (fastify) => {
 
     if (error) throw error
 
-    return { agreements: data }
+    return data || []
   })
 
   // Get agreement by ID
@@ -155,6 +155,64 @@ const agreementsRoutes: FastifyPluginAsync = async (fastify) => {
     }
 
     return reply.code(204).send()
+  })
+
+  // Get evaluations for a specific agreement
+  fastify.get('/agreements/:id/evaluations', {
+    onRequest: authMiddleware
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string }
+
+    // Verify agreement belongs to user's org
+    const { data: agreement } = await supabase
+      .from('agreements')
+      .select('id')
+      .eq('id', id)
+      .eq('org_id', request.auth!.orgId)
+      .single()
+
+    if (!agreement) {
+      return reply.code(404).send({ error: 'Agreement not found' })
+    }
+
+    const { data, error } = await supabase
+      .from('evaluations')
+      .select('*')
+      .eq('agreement_id', id)
+      .order('evaluated_at', { ascending: false })
+
+    if (error) throw error
+
+    return data || []
+  })
+
+  // Get breaches for a specific agreement
+  fastify.get('/agreements/:id/breaches', {
+    onRequest: authMiddleware
+  }, async (request, reply) => {
+    const { id } = request.params as { id: string }
+
+    // Verify agreement belongs to user's org
+    const { data: agreement } = await supabase
+      .from('agreements')
+      .select('id')
+      .eq('id', id)
+      .eq('org_id', request.auth!.orgId)
+      .single()
+
+    if (!agreement) {
+      return reply.code(404).send({ error: 'Agreement not found' })
+    }
+
+    const { data, error } = await supabase
+      .from('breaches')
+      .select('*')
+      .eq('agreement_id', id)
+      .order('created_at', { ascending: false })
+
+    if (error) throw error
+
+    return data || []
   })
 }
 

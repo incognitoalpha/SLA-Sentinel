@@ -39,15 +39,7 @@ const evaluationsRoutes: FastifyPluginAsync = async (fastify) => {
 
     const evaluations = data?.map(({ agreements, ...evaluation }) => evaluation) || []
 
-    return {
-      evaluations,
-      pagination: {
-        page: pageNum,
-        limit: limitNum,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limitNum)
-      }
-    }
+    return evaluations
   })
 
   // Get evaluation by ID

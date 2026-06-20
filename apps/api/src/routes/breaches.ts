@@ -44,15 +44,7 @@ const breachesRoutes: FastifyPluginAsync = async (fastify) => {
 
     const breaches = data?.map(({ agreements, ...breach }) => breach) || []
 
-    return {
-      breaches,
-      pagination: {
-        page: pageNum,
-        limit: limitNum,
-        total: count || 0,
-        totalPages: Math.ceil((count || 0) / limitNum)
-      }
-    }
+    return breaches
   })
 
   // Get breach by ID
