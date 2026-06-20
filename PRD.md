@@ -289,12 +289,18 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [x] **Test**: the "2 consecutive failures" policy does not flag a single isolated failure as downtime, but does flag two in a row
 
 ### Phase 3 — Aggregation & SLA Evaluation Engine
-- [ ] Write aggregation function: `computeUptimePct(probes[]) -> number`, `computeP95Latency(probes[]) -> number`
-- [ ] Write evaluation function: compare computed metrics to `agreements.sla_uptime_pct` / `sla_latency_p95_ms`, decide `breached`
-- [ ] Handle zero-probe windows: write an evaluation row but flag it `sample_size: 0` and never auto-breach on no data
-- [ ] On breach: write `breaches` row, enqueue notification, enqueue on-chain `recordOutcome(true)` call if `escrow_contract_address` is set
-- [ ] On no-breach at period end: enqueue on-chain `recordOutcome(false)` call if escrow is set
-- [ ] Schedule evaluation job: a "due periods" sweep that finds agreements whose `period_end` has passed and haven't been evaluated yet
+- [x] Write aggregation function: `computeUptimePct(probes[]) -> number`, `computeP95Latency(probes[]) -> number`
+- [x] Write evaluation function: compare computed metrics to `agreements.sla_uptime_pct` / `sla_latency_p95_ms`, decide `breached`
+- [x] Handle zero-probe windows: write an evaluation row but flag it `sample_size: 0` and never auto-breach on no data
+- [x] On breach: write `breaches` row, enqueue notification, enqueue on-chain `recordOutcome(true)` call if `escrow_contract_address` is set
+- [x] On no-breach at period end: enqueue on-chain `recordOutcome(false)` call if escrow is set
+- [x] Schedule evaluation job: a "due periods" sweep that finds agreements whose `period_end` has passed and haven't been evaluated yet
+- [x] **Test**: `computeUptimePct` returns 95.0 for 95/100 successful probes (fixture data)
+- [x] **Test**: `computeP95Latency` returns the correct value against a hand-computed fixture array
+- [x] **Test**: zero-probe window writes `sample_size: 0` and does not breach
+- [x] **Test**: uptime breach detection works correctly
+- [x] **Test**: latency breach detection works correctly
+- [ ] Deploy evaluator as Render Cron Job — **deferred to Phase 8**
 - [ ] **Test**: `computeUptimePct` returns 95.0 for 95/100 successful probes (fixture data)
 - [ ] **Test**: `computeP95Latency` returns the correct value against a hand-computed fixture array
 - [ ] **Test**: breach triggers when uptime is below threshold but latency is fine

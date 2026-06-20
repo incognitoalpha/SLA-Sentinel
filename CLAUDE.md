@@ -77,4 +77,19 @@ pnpm test
 
 **Phase 0** — Project Setup & Scaffolding (in progress)
 
+
+Recommended Claude Skills
+
+**Already available in this Claude Code environment (use these directly, no install needed):**
+- `engineering:architecture` — for the ADR-style decisions in `ARCHITECTURE.md` (Phase 9, and as you go)
+- `engineering:system-design` — useful when sketching the probe/evaluator/contract interaction in §5 if you want to stress-test the design further
+- `engineering:testing-strategy` — for planning coverage depth per phase beyond what's listed in §12/§13
+- `engineering:code-review` — run before merging each phase's PR
+- `engineering:debug` — structured debugging if a probe/evaluation/contract interaction misbehaves
+- `engineering:deploy-checklist` — use directly for Phase 8
+- `engineering:documentation` — for `README.md` / `ARCHITECTURE.md` polish in Phase 9
+- `frontend-design` — already referenced in §10; re-consult it if extending the dashboard beyond what `DESIGN-vercel.md` specifies (e.g. the breach timeline, which isn't a Vercel marketing-site pattern)
+- A **supabase-postgres-best-practices** skill for Phase 1
+- A **playwright-e2e-testing** skill for Phase 7/8
+- A **smart-contract-vulnerabilities** skill to sanity-check `SLAEscrow.sol` before calling it "audited-style" in your README (don't claim a real audit if you only ran a checklist)
 Refer to PRD.md §12 for the complete implementation plan and checklist.

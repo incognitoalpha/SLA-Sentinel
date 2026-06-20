@@ -36,6 +36,7 @@ async function main() {
 
   await runMigration('001_initial_schema.sql')
   await runMigration('002_rls_policies.sql')
+  await runMigration('003_add_evaluated_at.sql')
 
   console.log('All migrations applied successfully')
 }
