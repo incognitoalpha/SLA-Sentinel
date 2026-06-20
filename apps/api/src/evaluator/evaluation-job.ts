@@ -187,7 +187,33 @@ export async function runEvaluations(): Promise<void> {
       await saveBreach(evaluationId, agreement.id, result.breachReason!)
       console.log(`  ✗ BREACH: ${result.breachReason}`)
 
-      // TODO Phase 5: Enqueue notification
+      // Send breach notification email
+      try {
+        const { sendBreachEmail } = await import('../notifications/email.js')
+        // TODO: Get org email from database
+        const orgEmail = process.env.BREACH_NOTIFICATION_EMAIL || 'demo@example.com'
+
+        const emailResult = await sendBreachEmail(orgEmail, {
+          agreementName: agreement.name,
+          providerName: 'Provider', // TODO: Fetch provider name
+          breachReason: result.breachReason!,
+          periodStart: agreement.period_start.toISOString(),
+          periodEnd: agreement.period_end.toISOString(),
+          computedUptimePct: result.computedUptimePct,
+          computedP95LatencyMs: result.computedP95LatencyMs,
+          slaUptimePct: agreement.sla_uptime_pct,
+          slaLatencyP95Ms: agreement.sla_latency_p95_ms,
+          breachTimestamp: new Date().toISOString()
+        })
+
+        if (emailResult.success) {
+          console.log(`  ✉ Email sent: ${emailResult.messageId}`)
+        } else {
+          console.error(`  ✉ Email failed: ${emailResult.error}`)
+        }
+      } catch (error) {
+        console.error(`  Failed to send email:`, error)
+      }
 
       // Record breach on-chain if escrow exists
       if (agreement.escrow_contract_address) {
