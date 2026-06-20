@@ -14,7 +14,8 @@
       "Bash(pnpm --filter contracts test)",
       "Bash(pnpm *)",
       "Bash(curl http://localhost:3001/api/healthz)",
-      "Bash(pkill -f \"tsx watch\")"
+      "Bash(pkill -f \"tsx watch\")",
+      "Bash(curl http://localhost:3000/login)"
     ]
   }
 }

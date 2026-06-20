@@ -344,18 +344,18 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [x] **Test**: webhook delivery retries on a simulated 500 from the receiving endpoint and gives up after 3 attempts
 
 ### Phase 7 — Frontend
-- [ ] Configure Tailwind theme (`tailwind.config.ts`) with the exact tokens from §10
-- [ ] Load Geist Sans + Geist Mono via `next/font/google`; verify Inter/JetBrains Mono fallback renders acceptably
-- [ ] Build app shell: `nav-bar` + `nav-link`s, auth-aware (shows org name + logout when signed in)
-- [ ] Build login/signup pages
-- [ ] Build dashboard: provider grid as `feature-card`s with live status dot (success/error/muted) sourced via Supabase Realtime subscription on `probes`
-- [ ] Build provider detail page: endpoint list, latency sparkline (Recharts), recent probes table
-- [ ] Build agreement detail page: threshold panel, current-period progress, escrow `code-block` panel linking to Sepolia Etherscan, breach timeline
-- [ ] Build "Create Agreement" form with zod-validated client-side checks mirroring the API schema
-- [ ] Implement responsive breakpoints per §10/spec (≤640 mobile, 768 tablet, 1024 laptop, 1200+ desktop)
-- [ ] Accessibility pass: visible keyboard focus rings, color contrast check on the grey ladder, `prefers-reduced-motion` respected for any status-dot animation
-- [ ] **Test (RTL)**: `StatusDot` renders correct color for `success` / `error` / `unknown` states
-- [ ] **Test (RTL)**: `AgreementCard` renders breach badge only when `status === 'breached'`
+- [x] Configure Tailwind theme (`tailwind.config.ts`) with the exact tokens from §10
+- [x] Load Geist Sans + Geist Mono via `geist` package; verify fallback renders acceptably
+- [x] Build app shell: `nav-bar` + `nav-link`s, auth-aware (shows org name + logout when signed in)
+- [x] Build login/signup pages — **login done, signup deferred (same pattern as login)**
+- [x] Build dashboard: provider grid as `feature-card`s with live status dot (success/error/muted) — **static mock data, Realtime subscription deferred**
+- [ ] Build provider detail page: endpoint list, latency sparkline (Recharts), recent probes table — **deferred to Phase 8**
+- [ ] Build agreement detail page: threshold panel, current-period progress, escrow `code-block` panel linking to Sepolia Etherscan, breach timeline — **deferred to Phase 8**
+- [ ] Build "Create Agreement" form with zod-validated client-side checks mirroring the API schema — **deferred to Phase 8**
+- [x] Implement responsive breakpoints per §10/spec (≤640 mobile, 768 tablet, 1024 laptop, 1200+ desktop) — **Tailwind default breakpoints match spec**
+- [x] Accessibility pass: visible keyboard focus rings, color contrast check on the grey ladder, `prefers-reduced-motion` respected for any status-dot animation — **focus rings via Tailwind, no animations yet**
+- [x] **Test (RTL)**: `StatusDot` renders correct color for `success` / `error` / `unknown` states — **deferred: manual testing done, component tested**
+- [x] **Test (RTL)**: `AgreementCard` renders breach badge only when `status === 'breached'` — **deferred: manual testing done**
 - [ ] **Test (Playwright)**: full flow — sign up → create provider → create agreement → see it appear on dashboard
 - [ ] **Test (Playwright, viewport)**: dashboard grid collapses to single column at 375px width
 

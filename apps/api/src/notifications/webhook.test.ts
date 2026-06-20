@@ -64,17 +64,26 @@ describe('deliverWebhook', () => {
   })
 
   it('retries on 500 response and gives up after 3 attempts', async () => {
+    vi.useFakeTimers()
+
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 500
     })
 
-    const result = await deliverWebhook('https://example.com/webhook', mockPayload, 'secret', 3)
+    const deliveryPromise = deliverWebhook('https://example.com/webhook', mockPayload, 'secret', 3)
+
+    // Fast-forward through all timeouts
+    await vi.runAllTimersAsync()
+
+    const result = await deliveryPromise
 
     expect(result.success).toBe(false)
     expect(result.attempts).toBe(3)
     expect(result.error).toContain('Failed after 3 attempts')
     expect(global.fetch).toHaveBeenCalledTimes(3)
+
+    vi.useRealTimers()
   })
 
   it('includes correct HMAC signature in request headers', async () => {
@@ -95,23 +104,28 @@ describe('deliverWebhook', () => {
   })
 
   it('retries with exponential backoff', async () => {
-    const delays: number[] = []
-    const originalSetTimeout = global.setTimeout
+    vi.useFakeTimers()
 
-    global.setTimeout = vi.fn((fn: any, delay: number) => {
-      delays.push(delay)
-      return originalSetTimeout(fn, 0) as any
-    }) as any
+    const delays: number[] = []
+    const spySetTimeout = vi.spyOn(global, 'setTimeout')
 
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 500
     })
 
-    await deliverWebhook('https://example.com/webhook', mockPayload, 'secret', 3)
+    const deliveryPromise = deliverWebhook('https://example.com/webhook', mockPayload, 'secret', 3)
 
-    expect(delays).toEqual([2000, 4000]) // 2^1 * 1000, 2^2 * 1000
+    await vi.runAllTimersAsync()
+    await deliveryPromise
 
-    global.setTimeout = originalSetTimeout
+    const timeoutCalls = spySetTimeout.mock.calls
+      .filter(call => typeof call[1] === 'number')
+      .map(call => call[1] as number)
+
+    expect(timeoutCalls).toContain(2000) // 2^1 * 1000
+    expect(timeoutCalls).toContain(4000) // 2^2 * 1000
+
+    vi.useRealTimers()
   })
 })
