@@ -188,11 +188,32 @@ export async function runEvaluations(): Promise<void> {
       console.log(`  ✗ BREACH: ${result.breachReason}`)
 
       // TODO Phase 5: Enqueue notification
-      // TODO Phase 4: If escrow_contract_address set, enqueue recordOutcome(true) call
+
+      // Record breach on-chain if escrow exists
+      if (agreement.escrow_contract_address) {
+        try {
+          const { recordOutcomeOnChain } = await import('../blockchain/escrow-client.js')
+          const { txHash } = await recordOutcomeOnChain(agreement.id, true)
+          console.log(`  ⛓ Recorded breach on-chain: ${txHash}`)
+
+          // TODO: Save txHash to breaches.on_chain_tx_hash
+        } catch (error) {
+          console.error(`  Failed to record on-chain:`, error)
+        }
+      }
     } else {
       console.log(`  ✓ No breach`)
 
-      // TODO Phase 4: If escrow_contract_address set, enqueue recordOutcome(false) call
+      // Record success on-chain if escrow exists
+      if (agreement.escrow_contract_address) {
+        try {
+          const { recordOutcomeOnChain } = await import('../blockchain/escrow-client.js')
+          const { txHash } = await recordOutcomeOnChain(agreement.id, false)
+          console.log(`  ⛓ Recorded success on-chain: ${txHash}`)
+        } catch (error) {
+          console.error(`  Failed to record on-chain:`, error)
+        }
+      }
     }
 
     await markAgreementEvaluated(agreement.id)

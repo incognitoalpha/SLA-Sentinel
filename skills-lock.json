@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "smart-contract-vulnerabilities": {
+      "source": "yaklang/hack-skills",
+      "sourceType": "github",
+      "skillPath": "skills/smart-contract-vulnerabilities/SKILL.md",
+      "computedHash": "60259706250bc0c4053776c4d0489ae1e3e0dc941ce52cec7c17996fe73a21ab"
+    },
     "supabase": {
       "source": "supabase/agent-skills",
       "sourceType": "github",

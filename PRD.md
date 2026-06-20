@@ -309,18 +309,18 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [ ] **Test**: zero-probe window produces `sample_size: 0`, `breached: null/false`, and does not call the contract
 
 ### Phase 4 — Smart Contract
-- [ ] Implement `SLAEscrow.sol` per §8 with OpenZeppelin `Ownable` + `ReentrancyGuard`
-- [ ] **Test (Hardhat/Chai)**: `createEscrow` accepts payment and emits `EscrowCreated` with correct payer/payee/amount
-- [ ] **Test**: `recordOutcome` reverts when called by a non-oracle address
-- [ ] **Test**: `recordOutcome(false)` → payee can `withdraw()` the full amount; balance changes correctly
-- [ ] **Test**: `recordOutcome(true)` → payer can `withdraw()` (refund); payee's `withdraw()` reverts
-- [ ] **Test**: calling `withdraw()` twice on the same agreement reverts the second time
-- [ ] **Test**: `setOracle` is restricted to the contract owner
-- [ ] Write deploy script targeting Sepolia, output and record the deployed address
-- [ ] Verify contract source on Sepolia Etherscan
-- [ ] Backend integration: ethers.js/viem wallet client using the oracle private key (env var, never committed)
-- [ ] **Test**: backend's `recordOutcome` call function works against a local Hardhat node (not live testnet) in CI
-- [ ] Document Sepolia faucet URL and minimum oracle wallet balance needed in `README.md`
+- [x] Implement `SLAEscrow.sol` per §8 with OpenZeppelin `Ownable` + `ReentrancyGuard`
+- [x] **Test (Hardhat/Chai)**: `createEscrow` accepts payment and emits `EscrowCreated` with correct payer/payee/amount
+- [x] **Test**: `recordOutcome` reverts when called by a non-oracle address
+- [x] **Test**: `recordOutcome(false)` → payee can `withdraw()` the full amount; balance changes correctly
+- [x] **Test**: `recordOutcome(true)` → payer can `withdraw()` (refund); payee's `withdraw()` reverts
+- [x] **Test**: calling `withdraw()` twice on the same agreement reverts the second time
+- [x] **Test**: `setOracle` is restricted to the contract owner
+- [x] Write deploy script targeting Sepolia, output and record the deployed address
+- [ ] Verify contract source on Sepolia Etherscan — **manual step after deploy**
+- [x] Backend integration: ethers.js/viem wallet client using the oracle private key (env var, never committed)
+- [ ] **Test**: backend's `recordOutcome` call function works against a local Hardhat node (not live testnet) in CI — **deferred: requires Hardhat node setup in CI**
+- [ ] Document Sepolia faucet URL and minimum oracle wallet balance needed in `README.md` — **deferred to Phase 9 docs**
 
 ### Phase 5 — API Layer
 - [ ] Auth middleware: verify Supabase JWT, attach `{ userId, orgId, role }` to request context
