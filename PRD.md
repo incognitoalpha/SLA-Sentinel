@@ -323,18 +323,18 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [ ] Document Sepolia faucet URL and minimum oracle wallet balance needed in `README.md` — **deferred to Phase 9 docs**
 
 ### Phase 5 — API Layer
-- [ ] Auth middleware: verify Supabase JWT, attach `{ userId, orgId, role }` to request context
-- [ ] CRUD: providers, endpoints, agreements (per §9)
-- [ ] Read endpoints: evaluations, breaches, escrow status — paginated
-- [ ] `evaluate-now` endpoint (demo convenience — bypasses cron wait)
-- [ ] Escrow deposit endpoint
-- [ ] Webhook registration endpoint, HMAC-signed outbound delivery
-- [ ] Rate limiting (e.g. `@fastify/rate-limit`) on all public-facing routes
-- [ ] zod validation on every POST/PUT body, with a consistent 400 error shape
-- [ ] **Test**: each CRUD endpoint — happy path returns expected shape; invalid body returns 400 with field-level errors
-- [ ] **Test**: missing/invalid JWT returns 401 on a protected route
-- [ ] **Test**: org A's token cannot read org B's provider by ID (expect 404, not data leakage)
-- [ ] **Test**: `evaluate-now` actually inserts a new `evaluations` row and returns it
+- [x] Auth middleware: verify Supabase JWT, attach `{ userId, orgId, role }` to request context
+- [x] CRUD: providers, endpoints, agreements (per §9)
+- [x] Read endpoints: evaluations, breaches, escrow status — paginated
+- [x] `evaluate-now` endpoint (demo convenience — bypasses cron wait)
+- [ ] Escrow deposit endpoint — **deferred to Phase 7 (frontend integration)**
+- [ ] Webhook registration endpoint, HMAC-signed outbound delivery — **deferred to Phase 6 (notifications)**
+- [x] Rate limiting (e.g. `@fastify/rate-limit`) on all public-facing routes
+- [x] zod validation on every POST/PUT body, with a consistent 400 error shape
+- [ ] **Test**: each CRUD endpoint — happy path returns expected shape; invalid body returns 400 with field-level errors — **deferred: manual testing done, automated tests Phase 9**
+- [ ] **Test**: missing/invalid JWT returns 401 on a protected route — **deferred: manual testing done**
+- [ ] **Test**: org A's token cannot read org B's provider by ID (expect 404, not data leakage) — **deferred: RLS handles this, tested via RLS policies**
+- [ ] **Test**: `evaluate-now` actually inserts a new `evaluations` row and returns it — **deferred: integration test in Phase 9**
 
 ### Phase 6 — Notifications
 - [ ] Resend integration: breach email template (plain, direct copy per §10 voice guidance)
