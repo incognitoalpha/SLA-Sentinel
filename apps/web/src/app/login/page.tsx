@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { supabase } from '@/lib/supabase'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -11,18 +12,31 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
+  // Check if already logged in
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session) {
+        router.push('/dashboard')
+      }
+    })
+  }, [router])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
     setLoading(true)
 
     try {
-      // TODO: Implement Supabase auth
-      // const { error } = await supabase.auth.signInWithPassword({ email, password })
-      // if (error) throw error
-      // router.push('/dashboard')
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-      setError('Auth not yet implemented - Phase 7 in progress')
+      if (authError) throw authError
+
+      if (data.session) {
+        router.push('/dashboard')
+      }
     } catch (err: any) {
       setError(err.message || 'Login failed')
     } finally {

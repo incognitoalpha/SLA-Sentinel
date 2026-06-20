@@ -15,7 +15,13 @@
       "Bash(pnpm *)",
       "Bash(curl http://localhost:3001/api/healthz)",
       "Bash(pkill -f \"tsx watch\")",
-      "Bash(curl http://localhost:3000/login)"
+      "Bash(curl http://localhost:3000/login)",
+      "Bash(npm run *)",
+      "Bash(curl *)"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "supabase"
+  ]
 }

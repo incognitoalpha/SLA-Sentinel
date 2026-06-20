@@ -1,0 +1,161 @@
+import { supabase } from './supabase'
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3002'
+
+export type Provider = {
+  id: string
+  org_id: string
+  name: string
+  base_url: string
+  description: string | null
+  created_at: string
+}
+
+export type Endpoint = {
+  id: string
+  provider_id: string
+  url: string
+  method: string
+  expected_status: number
+  timeout_ms: number
+  probe_interval_seconds: number
+  is_active: boolean
+}
+
+export type ProviderWithEndpoints = Provider & {
+  endpoints: Endpoint[]
+}
+
+class APIClient {
+  private async getAuthToken(): Promise<string | null> {
+    const { data } = await supabase.auth.getSession()
+    return data.session?.access_token || null
+  }
+
+  private async request<T>(
+    path: string,
+    options: RequestInit = {}
+  ): Promise<T> {
+    const token = await this.getAuthToken()
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+    }
+
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`
+    }
+
+    const response = await fetch(`${API_BASE_URL}${path}`, {
+      ...options,
+      headers,
+    })
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({ message: 'Request failed' }))
+      throw new Error(error.message || `HTTP ${response.status}`)
+    }
+
+    return response.json()
+  }
+
+  async getProviders(): Promise<Provider[]> {
+    return this.request<Provider[]>('/api/providers')
+  }
+
+  async getProvider(id: string): Promise<ProviderWithEndpoints> {
+    return this.request<ProviderWithEndpoints>(`/api/providers/${id}`)
+  }
+
+  async createProvider(data: {
+    name: string
+    base_url: string
+    description?: string
+  }): Promise<Provider> {
+    return this.request<Provider>('/api/providers', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  }
+
+  async createEndpoint(providerId: string, data: {
+    url: string
+    method?: string
+    expected_status?: number
+    timeout_ms?: number
+    probe_interval_seconds?: number
+  }): Promise<Endpoint> {
+    return this.request<Endpoint>(`/api/providers/${providerId}/endpoints`, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    })
+  }
+
+  async getAgreements(): Promise<Agreement[]> {
+    return this.request<Agreement[]>('/api/agreements')
+  }
+
+  async getAgreement(id: string): Promise<AgreementDetail> {
+    return this.request<AgreementDetail>(`/api/agreements/${id}`)
+  }
+
+  async getAgreementEvaluations(id: string): Promise<Evaluation[]> {
+    return this.request<Evaluation[]>(`/api/agreements/${id}/evaluations`)
+  }
+
+  async getAgreementBreaches(id: string): Promise<Breach[]> {
+    return this.request<Breach[]>(`/api/agreements/${id}/breaches`)
+  }
+
+  async getBreaches(): Promise<Breach[]> {
+    return this.request<Breach[]>('/api/breaches')
+  }
+}
+
+export type Agreement = {
+  id: string
+  org_id: string
+  provider_id: string
+  name: string
+  sla_uptime_pct: number
+  sla_latency_p95_ms: number
+  period_type: 'daily' | 'weekly' | 'monthly'
+  penalty_amount_wei: string
+  escrow_contract_address: string | null
+  escrow_chain: string
+  deposit_tx_hash: string | null
+  status: 'pending' | 'active' | 'breached' | 'settled' | 'cancelled'
+  period_start: string
+  period_end: string
+  created_at: string
+}
+
+export type AgreementDetail = Agreement & {
+  provider: Provider
+  latest_evaluation?: Evaluation
+}
+
+export type Evaluation = {
+  id: string
+  agreement_id: string
+  period_start: string
+  period_end: string
+  computed_uptime_pct: number
+  computed_p95_latency_ms: number
+  breached: boolean
+  sample_size: number
+  evaluated_at: string
+}
+
+export type Breach = {
+  id: string
+  evaluation_id: string
+  agreement_id: string
+  reason: string
+  on_chain_tx_hash: string | null
+  notified_at: string
+  resolved: boolean
+  created_at: string
+}
+
+export const apiClient = new APIClient()
