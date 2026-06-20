@@ -267,13 +267,13 @@ Write from the user's side of the screen: "Create agreement," not "Submit SLA co
 - [x] Create `CLAUDE.md` and `ARCHITECTURE.md` stubs
 
 ### Phase 1 — Database & Auth
-- [ ] Write Supabase migration files for all tables in §7
-- [ ] Write RLS policies scoping every table by `org_id`
-- [ ] Configure Supabase Auth (email/password + magic link)
-- [ ] Write seed script: 1 demo org, 1 demo user, 2 demo providers with endpoints
-- [ ] **Test**: migrations apply cleanly to a fresh database
-- [ ] **Test**: RLS — a second org's user cannot `SELECT` org A's providers (integration test against a live Supabase test project or local Postgres with RLS enabled)
-- [ ] **Test**: seed script is idempotent (running it twice doesn't duplicate rows or error)
+- [x] Write Supabase migration files for all tables in §7
+- [x] Write RLS policies scoping every table by `org_id`
+- [x] Configure Supabase Auth (email/password + magic link)
+- [x] Write seed script: 1 demo org, 1 demo user, 2 demo providers with endpoints
+- [x] **Test**: migrations apply cleanly to a fresh database
+- [ ] **Test**: RLS — a second org's user cannot `SELECT` org A's providers (integration test against a live Supabase test project or local Postgres with RLS enabled) — **deferred to Phase 4 (will test with real auth users)**
+- [x] **Test**: seed script is idempotent (running it twice doesn't duplicate rows or error)
 
 ### Phase 2 — Probe Worker
 - [ ] Build probe runner: HTTP request to endpoint, capture status code, latency, success boolean
