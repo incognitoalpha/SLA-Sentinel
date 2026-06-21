@@ -1,0 +1,58 @@
+# Render Blueprint - SLA Sentinel (FREE TIER ONLY)
+# Alternative deployment that runs everything in a single free web service
+# Note: Uses in-process scheduler instead of separate cron jobs
+
+services:
+  # API Web Service with built-in scheduler
+  - type: web
+    name: sla-sentinel-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: cd apps/api && pnpm install && pnpm build
+    startCommand: cd apps/api && pnpm start
+    healthCheckPath: /api/healthz
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3002
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: SEPOLIA_RPC_URL
+        sync: false
+      - key: ORACLE_PRIVATE_KEY
+        sync: false
+      - key: SLA_ESCROW_CONTRACT_ADDRESS
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: WEBHOOK_SIGNING_SECRET
+        sync: false
+      - key: CORS_ORIGIN
+        value: https://sla-sentinel.vercel.app
+      - key: ENABLE_BACKGROUND_JOBS
+        value: "true"
+      # Schedule: Worker every 5 min, Evaluator every hour
+      - key: WORKER_SCHEDULE_CRON
+        value: "*/5 * * * *"
+      - key: EVALUATOR_SCHEDULE_CRON
+        value: "0 * * * *"
+
+# DEPLOYMENT NOTES:
+#
+# This free-tier configuration runs the worker and evaluator
+# as scheduled background tasks within the main API process.
+#
+# PROS:
+# - Fully free ($0/month)
+# - Simpler deployment (single service)
+#
+# CONS:
+# - Background jobs run in same process as API (shared resources)
+# - If API restarts, scheduled tasks restart
+# - Free tier has 750 hours/month limit per service
+#
+# For production, use render.yaml with separate cron jobs.
