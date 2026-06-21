@@ -19,19 +19,6 @@ function getSupabaseClient() {
   return _supabase
 }
 
-interface DueAgreement {
-  id: string
-  org_id: string
-  provider_id: string
-  name: string
-  sla_uptime_pct: number
-  sla_latency_p95_ms: number | null
-  period_type: string
-  period_start: string
-  period_end: string
-  escrow_contract_address: string | null
-}
-
 export async function findDueAgreements(): Promise<Agreement[]> {
   const supabase = getSupabaseClient()
   const now = new Date().toISOString()

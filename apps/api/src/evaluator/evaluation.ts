@@ -1,4 +1,4 @@
-import { aggregateProbes, AggregationResult } from './aggregation.js'
+import { aggregateProbes } from './aggregation.js'
 
 export interface Agreement {
   id: string

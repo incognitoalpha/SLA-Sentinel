@@ -13,7 +13,6 @@ describe('RLS Cross-Org Isolation', () => {
   let user1Id: string
   let user2Id: string
   let user1Token: string
-  let user2Token: string
   let provider1Id: string
   let provider2Id: string
 
@@ -59,13 +58,13 @@ describe('RLS Cross-Org Isolation', () => {
       email: user1!.email!,
       password: 'testpass123'
     })
-    user1Token = session1?.session?.access_token!
+    user1Token = session1?.session?.access_token || ''
 
-    const { data: session2 } = await supabaseAdmin.auth.signInWithPassword({
+    const { data: _session2 } = await supabaseAdmin.auth.signInWithPassword({
       email: user2!.email!,
       password: 'testpass123'
     })
-    user2Token = session2?.session?.access_token!
+    // session2 token not used in tests currently
 
     // Create test providers for each org using service role (bypasses RLS)
     const { data: providers, error: provError } = await supabaseAdmin
@@ -202,7 +201,7 @@ describe('RLS Cross-Org Isolation', () => {
       }
     )
 
-    const { data, error } = await user1Client
+    const { data } = await user1Client
       .from('providers')
       .insert({
         org_id: org2Id, // Try to insert into user2's org

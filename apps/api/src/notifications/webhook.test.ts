@@ -106,7 +106,6 @@ describe('deliverWebhook', () => {
   it('retries with exponential backoff', async () => {
     vi.useFakeTimers()
 
-    const delays: number[] = []
     const spySetTimeout = vi.spyOn(global, 'setTimeout')
 
     global.fetch = vi.fn().mockResolvedValue({

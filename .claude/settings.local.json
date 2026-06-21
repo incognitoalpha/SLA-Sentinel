@@ -23,7 +23,9 @@
       "Bash(pkill *)",
       "Bash(git push *)",
       "Bash(chmod +x setup-supabase.sh verify-setup.sh)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(cd *)",
+      "Bash(env)"
     ]
   },
   "enableAllProjectMcpServers": true,

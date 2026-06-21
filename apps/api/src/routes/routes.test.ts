@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import Fastify, { FastifyRequest, FastifyReply } from 'fastify'
+import Fastify, { FastifyRequest, FastifyReply, FastifyInstance } from 'fastify'
 import { createClient } from '@supabase/supabase-js'
 import 'dotenv/config'
 
@@ -15,7 +15,7 @@ const supabaseAdmin = createClient(
 )
 
 describe('API Integration Tests', () => {
-  let app: any
+  let app: FastifyInstance
   let orgId: string
   let userId: string
   let authToken: string
@@ -96,7 +96,7 @@ describe('API Integration Tests', () => {
       email: user!.email!,
       password: 'testpass123'
     })
-    authToken = session?.session?.access_token!
+    authToken = session?.session?.access_token || ''
   })
 
   afterAll(async () => {

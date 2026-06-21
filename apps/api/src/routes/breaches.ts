@@ -36,13 +36,13 @@ const breachesRoutes: FastifyPluginAsync = async (fastify) => {
       query = query.eq('resolved', resolved === 'true')
     }
 
-    const { data, error, count } = await query
+    const { data, error } = await query
       .order('created_at', { ascending: false })
       .range(offset, offset + limitNum - 1)
 
     if (error) throw error
 
-    const breaches = data?.map(({ agreements, ...breach }) => breach) || []
+    const breaches = data?.map(({ agreements: _agreements, ...breach }) => breach) || []
 
     return breaches
   })
@@ -64,7 +64,7 @@ const breachesRoutes: FastifyPluginAsync = async (fastify) => {
       return reply.code(404).send({ error: 'Breach not found' })
     }
 
-    const { agreements, ...breach } = data
+    const { agreements: _agreements, ...breach } = data
     return breach
   })
 }

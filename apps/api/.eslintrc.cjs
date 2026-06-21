@@ -14,4 +14,14 @@ module.exports = {
     ecmaVersion: 2022,
     sourceType: 'module',
   },
+  rules: {
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
+  },
 }

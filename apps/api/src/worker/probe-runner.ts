@@ -63,22 +63,29 @@ export async function probeEndpoint(
       errorMessage,
       checkedAt
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     const latencyMs = Math.round(performance.now() - startTime)
 
     let errorMessage: string
-    if (error.name === 'AbortError') {
+    const err = error as {
+      name?: string
+      code?: string
+      message?: string
+      cause?: { code?: string; hostname?: string }
+    }
+
+    if (err.name === 'AbortError') {
       errorMessage = `Timeout after ${timeoutMs}ms`
-    } else if (error.code === 'ENOTFOUND' || error.cause?.code === 'ENOTFOUND') {
-      errorMessage = `DNS resolution failed: ${error.cause?.hostname || 'unknown'}`
-    } else if (error.message?.includes('certificate') || error.message?.includes('TLS') || error.message?.includes('SSL')) {
-      errorMessage = `TLS/SSL error: ${error.message}`
-    } else if (error.cause?.code === 'ECONNREFUSED') {
+    } else if (err.code === 'ENOTFOUND' || err.cause?.code === 'ENOTFOUND') {
+      errorMessage = `DNS resolution failed: ${err.cause?.hostname || 'unknown'}`
+    } else if (err.message?.includes('certificate') || err.message?.includes('TLS') || err.message?.includes('SSL')) {
+      errorMessage = `TLS/SSL error: ${err.message}`
+    } else if (err.cause?.code === 'ECONNREFUSED') {
       errorMessage = `Connection refused`
-    } else if (error.cause?.code === 'ECONNRESET') {
+    } else if (err.cause?.code === 'ECONNRESET') {
       errorMessage = `Connection reset`
     } else {
-      errorMessage = `Network error: ${error.message}`
+      errorMessage = `Network error: ${err.message || 'Unknown error'}`
     }
 
     return {

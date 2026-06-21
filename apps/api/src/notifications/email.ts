@@ -34,9 +34,9 @@ export async function sendBreachEmail(
     }
 
     return { success: true, messageId: result?.id }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to send email:', error)
-    return { success: false, error: error.message }
+    return { success: false, error: error instanceof Error ? error.message : 'Unknown error' }
   }
 }
 

@@ -60,7 +60,7 @@ export async function recordOutcomeOnChain(
       txHash: tx.hash,
       success: receipt.status === 1
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to record outcome on-chain:', error)
     throw error
   }
@@ -92,7 +92,7 @@ export async function getEscrowStatus(agreementId: string): Promise<{
       settled: escrow.settled,
       breached: escrow.breached
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Failed to get escrow status:', error)
     throw error
   }

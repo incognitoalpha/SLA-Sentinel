@@ -4,13 +4,11 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    exclude: [
-      '**/node_modules/**',
-      '**/dist/**',
-      // Exclude integration tests that require Supabase credentials
-      '**/*.integration.test.ts',
+    include: [
       '**/db.test.ts',
       '**/routes.test.ts',
+      '**/*.integration.test.ts',
     ],
+    testTimeout: 30000,
   },
 })

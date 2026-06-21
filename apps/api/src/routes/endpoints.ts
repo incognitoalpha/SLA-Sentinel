@@ -41,7 +41,7 @@ const endpointsRoutes: FastifyPluginAsync = async (fastify) => {
     if (error) throw error
 
     // Strip join data
-    const endpoints = data?.map(({ providers, ...endpoint }) => endpoint) || []
+    const endpoints = data?.map(({ providers: _providers, ...endpoint }) => endpoint) || []
 
     return { endpoints }
   })
@@ -63,7 +63,7 @@ const endpointsRoutes: FastifyPluginAsync = async (fastify) => {
       return reply.code(404).send({ error: 'Endpoint not found' })
     }
 
-    const { providers, ...endpoint } = data
+    const { providers: _providers2, ...endpoint } = data
     return endpoint
   })
 
@@ -129,7 +129,7 @@ const endpointsRoutes: FastifyPluginAsync = async (fastify) => {
       return reply.code(404).send({ error: 'Endpoint not found' })
     }
 
-    const { providers, ...endpoint } = data
+    const { providers: _providers, ...endpoint } = data
     return endpoint
   })
 

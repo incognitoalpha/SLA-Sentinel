@@ -68,8 +68,8 @@ export async function deliverWebhook(
         console.log(`Retrying in ${backoffMs}ms...`)
         await new Promise(resolve => setTimeout(resolve, backoffMs))
       }
-    } catch (error: any) {
-      console.error(`Webhook attempt ${attempt} error:`, error.message)
+    } catch (error: unknown) {
+      console.error(`Webhook attempt ${attempt} error:`, error instanceof Error ? error.message : 'Unknown error')
 
       if (attempt < retries) {
         const backoffMs = Math.pow(2, attempt) * 1000

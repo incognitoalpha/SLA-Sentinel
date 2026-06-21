@@ -31,13 +31,13 @@ const evaluationsRoutes: FastifyPluginAsync = async (fastify) => {
       query = query.eq('agreement_id', agreement_id)
     }
 
-    const { data, error, count } = await query
+    const { data, error } = await query
       .order('evaluated_at', { ascending: false })
       .range(offset, offset + limitNum - 1)
 
     if (error) throw error
 
-    const evaluations = data?.map(({ agreements, ...evaluation }) => evaluation) || []
+    const evaluations = data?.map(({ agreements: _agreements, ...evaluation }) => evaluation) || []
 
     return evaluations
   })
@@ -59,7 +59,7 @@ const evaluationsRoutes: FastifyPluginAsync = async (fastify) => {
       return reply.code(404).send({ error: 'Evaluation not found' })
     }
 
-    const { agreements, ...evaluation } = data
+    const { agreements: _agreements, ...evaluation } = data
     return evaluation
   })
 }
