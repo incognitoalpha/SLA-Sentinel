@@ -9,7 +9,7 @@ A full-stack production-ready application demonstrating end-to-end Web3 engineer
 [![Solidity](https://img.shields.io/badge/Solidity-0.8.24-gray)](https://soliditylang.org/)
 [![Tests](https://img.shields.io/badge/Tests-96%2B-green)](./TESTING.md)
 
-🚀 **Status:** Feature-complete and production-ready for Sepolia testnet deployment
+**Status:** Feature-complete and production-ready for Sepolia testnet deployment
 
 ---
 
@@ -26,24 +26,24 @@ Companies integrate dozens of third-party APIs (payment gateways, KYC providers,
 
 ## Features
 
-### ✅ Monitoring & Detection
+### Monitoring & Detection
 - **Continuous endpoint probing** with configurable intervals (30s-5min)
 - **Uptime % and P95 latency aggregation** per evaluation period (daily/weekly/monthly)
 - **SLA breach detection** with 2-consecutive-failures policy (avoids false positives)
 - **Real-time status updates** via Supabase Realtime subscriptions
 
-### ✅ Smart Contract Escrow
+### Smart Contract Escrow
 - **Sepolia testnet deployment** with escrow deposit/settlement/withdrawal
 - **Automated breach settlement** transferring penalty to beneficiary
 - **Oracle-based enforcement** with admin controls
 - **Etherscan verification** for transparent contract source
 
-### ✅ Notifications
+### Notifications
 - **Email notifications** via Resend on breach detection
 - **Webhook delivery** with HMAC signatures and exponential backoff retry
 - **Configurable recipients** per agreement
 
-### ✅ Dashboard & UI
+### Dashboard & UI
 - **User authentication** (login + signup with organization creation)
 - **Provider management** (CRUD operations for third-party APIs)
 - **Agreement creation** (full UI form for SLA configuration)
@@ -52,7 +52,7 @@ Companies integrate dozens of third-party APIs (payment gateways, KYC providers,
 - **Evaluation history** with pass/fail metrics
 - **Responsive design** using Geist design system
 
-### ✅ Security & Isolation
+### Security & Isolation
 - **Row-Level Security (RLS)** scoping all data by organization
 - **API authentication** via Supabase JWT tokens
 - **Cross-org isolation** preventing data leakage
@@ -62,19 +62,18 @@ Companies integrate dozens of third-party APIs (payment gateways, KYC providers,
 
 ## Architecture
 
-```
-┌─────────────────┐         ┌──────────────────┐         ┌──────────────────┐
-│ Next.js (Vercel)│◀────────│ Supabase         │────────▶│ Fastify (Render) │
-│ Dashboard + UI  │  REST   │ Postgres + Auth  │  read   │ API + Workers    │
-└─────────────────┘         │ + RLS + Realtime │         └────────┬─────────┘
-                            └──────────────────┘                  │
-                                     ▲                             │ ethers.js
-                                     │ write                       ▼
-                            ┌────────┴────────┐         ┌──────────────────┐
-                            │ Render Workers: │         │ Sepolia Testnet  │
-                            │ • Probe (5min)  │         │ SLAEscrow.sol    │
-                            │ • Evaluate (1d) │         └──────────────────┘
-                            └─────────────────┘
+```mermaid
+graph TD
+    NextJS["Next.js (Vercel)<br/>Dashboard + UI"]
+    Supa["Supabase<br/>Postgres + Auth<br/>+ RLS + Realtime"]
+    Fastify["Fastify (Render)<br/>API"]
+    Workers["Render Workers<br/>• Probe (5min)<br/>• Evaluate (1d)"]
+    Sepolia["Sepolia Testnet<br/>SLAEscrow.sol"]
+
+    Supa -- "REST" --> NextJS
+    Fastify -- "Reads" --> Supa
+    Workers -- "Writes" --> Supa
+    Fastify -- "ethers.js" --> Sepolia
 ```
 
 **Tech Stack:**
@@ -152,7 +151,10 @@ pnpm deploy:sepolia
 # SLA_ESCROW_CONTRACT_ADDRESS=0x...
 ```
 
-See [DEPLOYMENT-CONTRACT.md](./DEPLOYMENT-CONTRACT.md) for detailed instructions.
+Verify on Etherscan:
+```bash
+npx hardhat verify --network sepolia <CONTRACT_ADDRESS> <ORACLE_ADDRESS>
+```
 
 ### 5. Start Development Servers
 ```bash
@@ -198,7 +200,7 @@ pnpm test:e2e
 pnpm test:e2e:ui
 ```
 
-See [TESTING.md](./TESTING.md) for comprehensive testing guide.
+
 
 ---
 
@@ -230,28 +232,15 @@ See [TESTING.md](./TESTING.md) for comprehensive testing guide.
 - Enable RLS policies
 - Configure auth providers
 
-See [PRD.md §16](./PRD.md#16-deployment-checklist) for complete checklist.
+
 
 ---
 
-## Documentation
 
-| Document | Description |
-|----------|-------------|
-| [PRD.md](./PRD.md) | Product requirements and implementation plan |
-| [TESTING.md](./TESTING.md) | Comprehensive testing guide and coverage |
-| [DEPLOYMENT-CONTRACT.md](./DEPLOYMENT-CONTRACT.md) | Smart contract deployment instructions |
-| [BUGFIXES.md](./BUGFIXES.md) | Critical bug fixes audit report |
-| [FEATURE-COMPLETION.md](./FEATURE-COMPLETION.md) | High-priority features completion summary |
-| [DESIGN-vercel.md](./DESIGN-vercel.md) | Frontend design system specification |
-| [CLAUDE.md](./CLAUDE.md) | Agent working agreement and project context |
-| [ARCHITECTURE.md](./ARCHITECTURE.md) | System design and architectural decisions |
 
----
+<!-- ## Project Status
 
-## Project Status
-
-**Current Phase:** Phase 9 — Documentation & Polish (in progress)
+**Current Phase:** Phase 9 — Documentation & Polish (Complete)
 
 **Completed Phases:**
 - ✅ Phase 0: Project setup & monorepo scaffolding
@@ -268,9 +257,9 @@ See [PRD.md §16](./PRD.md#16-deployment-checklist) for complete checklist.
 **Additional Work:**
 - ✅ Critical bug fixes (API response format + missing routes)
 - ✅ Deferred tests (RLS + API integration + E2E)
-- ✅ High-priority features (Create Agreement + Signup)
+- ✅ High-priority features (Create Agreement + Signup) -->
 
-See [PRD.md](./PRD.md) for complete implementation checklist.
+
 
 ---
 
@@ -291,7 +280,7 @@ See [PRD.md](./PRD.md) for complete implementation checklist.
 - **Atomic deployments:** Deploy related changes together
 - **Single command:** `pnpm test` runs all workspace tests
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for detailed discussion.
+
 
 ---
 
@@ -301,19 +290,3 @@ MIT (portfolio/demo project)
 
 ---
 
-## Demo & Contact
-
-**Live Demo:** [Link after deployment]
-
-**Walkthrough Video:** [3-minute demo after Phase 9]
-- Simulate failing endpoint
-- Breach detected and email sent
-- View on-chain settlement on Sepolia Etherscan
-
-**Author:** [Your Name]  
-**GitHub:** [Your GitHub]  
-**LinkedIn:** [Your LinkedIn]
-
----
-
-⚠️ **Testnet Only** — This platform uses Sepolia testnet for demonstration. No real funds are involved.
