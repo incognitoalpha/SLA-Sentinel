@@ -20,7 +20,10 @@
       "Bash(curl *)",
       "Read(//c/Users/sarth/Desktop/**)",
       "Bash(find . -maxdepth 3 -name \"*.env.example\")",
-      "Bash(pkill *)"
+      "Bash(pkill *)",
+      "Bash(git push *)",
+      "Bash(chmod +x setup-supabase.sh verify-setup.sh)",
+      "Bash(node -e ' *)"
     ]
   },
   "enableAllProjectMcpServers": true,
