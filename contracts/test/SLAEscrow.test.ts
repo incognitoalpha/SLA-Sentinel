@@ -18,7 +18,7 @@ describe("SLAEscrow", function () {
     [owner, oracle, payer, payee, other] = await ethers.getSigners();
 
     const SLAEscrow = await ethers.getContractFactory("SLAEscrow");
-    escrow = await SLAEscrow.deploy(oracle.address);
+    escrow = (await SLAEscrow.deploy(oracle.address)) as unknown as SLAEscrow;
     await escrow.waitForDeployment();
   });
 
