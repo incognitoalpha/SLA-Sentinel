@@ -53,7 +53,7 @@ const start = async () => {
         try {
           await runProbes()
         } catch (error) {
-          fastify.log.error('Worker job failed:', error)
+          fastify.log.error({ err: error }, 'Worker job failed')
         }
       })
       fastify.log.info(`Worker scheduled: ${workerSchedule}`)
@@ -64,7 +64,7 @@ const start = async () => {
         try {
           await runEvaluations()
         } catch (error) {
-          fastify.log.error('Evaluator job failed:', error)
+          fastify.log.error({ err: error }, 'Evaluator job failed')
         }
       })
       fastify.log.info(`Evaluator scheduled: ${evaluatorSchedule}`)
