@@ -103,7 +103,7 @@ describe("SLAEscrow", function () {
 
       const tx = await escrow.connect(payee).withdraw(agreementId);
       const receipt = await tx.wait();
-      const gasUsed = receipt!.gasUsed * receipt!.gasPrice;
+      const gasUsed = receipt!.gasUsed * (receipt!.gasPrice || 0n);
 
       const payeeBalanceAfter = await ethers.provider.getBalance(payee.address);
 
@@ -131,7 +131,7 @@ describe("SLAEscrow", function () {
 
       const tx = await escrow.connect(payer).withdraw(agreementId);
       const receipt = await tx.wait();
-      const gasUsed = receipt!.gasUsed * receipt!.gasPrice;
+      const gasUsed = receipt!.gasUsed * (receipt!.gasPrice || 0n);
 
       const payerBalanceAfter = await ethers.provider.getBalance(payer.address);
 
