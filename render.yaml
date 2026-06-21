@@ -38,7 +38,7 @@ services:
     name: sla-sentinel-worker
     runtime: node
     region: oregon
-    plan: free
+    plan: starter
     buildCommand: cd apps/api && pnpm install && pnpm build
     startCommand: cd apps/api && pnpm worker:prod
     schedule: "*/5 * * * *"
@@ -55,7 +55,7 @@ services:
     name: sla-sentinel-evaluator
     runtime: node
     region: oregon
-    plan: free
+    plan: starter
     buildCommand: cd apps/api && pnpm install && pnpm build
     startCommand: cd apps/api && pnpm evaluator:prod
     schedule: "0 * * * *"
