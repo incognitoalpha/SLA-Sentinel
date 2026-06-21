@@ -67,8 +67,8 @@ describe('RLS Cross-Org Isolation', () => {
     })
     user2Token = session2?.session?.access_token!
 
-    // Create test providers for each org
-    const { data: providers } = await supabaseAdmin
+    // Create test providers for each org using service role (bypasses RLS)
+    const { data: providers, error: provError } = await supabaseAdmin
       .from('providers')
       .insert([
         { org_id: org1Id, name: 'Provider 1', base_url: 'https://api1.example.com' },
@@ -76,8 +76,12 @@ describe('RLS Cross-Org Isolation', () => {
       ])
       .select()
 
-    provider1Id = providers![0].id
-    provider2Id = providers![1].id
+    if (provError || !providers || providers.length !== 2) {
+      throw new Error(`Failed to create test providers: ${provError?.message || 'No data returned'}`)
+    }
+
+    provider1Id = providers[0].id
+    provider2Id = providers[1].id
   })
 
   afterAll(async () => {
@@ -214,8 +218,18 @@ describe('RLS Cross-Org Isolation', () => {
 
 describe('Seed script idempotency', () => {
   it('should run seed twice without error', async () => {
-    // Test that upsert with onConflict works
-    const { data, error } = await supabaseAdmin
+    // First insert - create the org
+    const { error: error1 } = await supabaseAdmin
+      .from('organizations')
+      .upsert({
+        id: '00000000-0000-0000-0000-000000000001',
+        name: 'Demo Corp'
+      }, { onConflict: 'id' })
+
+    expect(error1).toBeNull()
+
+    // Second insert - should not error (idempotent)
+    const { data, error: error2 } = await supabaseAdmin
       .from('organizations')
       .upsert({
         id: '00000000-0000-0000-0000-000000000001',
@@ -223,7 +237,9 @@ describe('Seed script idempotency', () => {
       }, { onConflict: 'id' })
       .select()
 
-    expect(error).toBeNull()
+    expect(error2).toBeNull()
     expect(data).toBeDefined()
+    expect(data).toHaveLength(1)
+    expect(data![0].name).toBe('Demo Corp')
   })
 })

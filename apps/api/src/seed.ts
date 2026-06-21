@@ -31,9 +31,51 @@ async function seed() {
   }
   console.log('✓ Created organization:', org.name)
 
-  // Create demo user (note: this requires the user to exist in auth.users first)
-  // For now, we'll create a profile placeholder that can be linked later
-  const demoUserId = '00000000-0000-0000-0000-000000000002'
+  // Create demo user via Supabase Auth
+  const demoEmail = 'demo@democorp.com'
+  const demoPassword = 'demo123456'
+  let demoUserId = '00000000-0000-0000-0000-000000000002'
+
+  // Check if demo user already exists
+  const { data: existingUser } = await supabase.auth.admin.listUsers()
+  const demoUser = existingUser?.users.find(u => u.email === demoEmail)
+
+  if (demoUser) {
+    console.log('✓ Demo user already exists:', demoEmail)
+    demoUserId = demoUser.id
+  } else {
+    // Create new demo user
+    const { data: newUser, error: userError } = await supabase.auth.admin.createUser({
+      email: demoEmail,
+      password: demoPassword,
+      email_confirm: true,
+      user_metadata: { name: 'Demo User' }
+    })
+
+    if (userError) {
+      console.error('Failed to create demo user:', userError)
+      console.log('Skipping user creation, you can create manually via Supabase dashboard')
+    } else {
+      demoUserId = newUser.user.id
+      console.log('✓ Created demo user:', demoEmail)
+      console.log('  Password:', demoPassword)
+    }
+  }
+
+  // Create profile for demo user
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .upsert({
+      id: demoUserId,
+      org_id: org.id,
+      role: 'owner'
+    }, { onConflict: 'id' })
+
+  if (profileError) {
+    console.error('Failed to create profile:', profileError)
+  } else {
+    console.log('✓ Created profile for demo user')
+  }
 
   // Create demo providers
   const { data: provider1, error: p1Error } = await supabase
@@ -116,8 +158,11 @@ async function seed() {
   }
   console.log('✓ Created endpoint:', endpoint2.url)
 
-  console.log('\nSeed complete! Demo data created.')
-  console.log('Note: Create a user via Supabase Auth UI and manually link to org_id:', org.id)
+  console.log('\n✅ Seed complete! Demo data created.')
+  console.log('\nDemo Login Credentials:')
+  console.log('  Email:', demoEmail)
+  console.log('  Password:', demoPassword)
+  console.log('  Organization:', org.name)
 }
 
 seed().catch(err => {

@@ -11,7 +11,7 @@ describe('API Response Format Verification', () => {
   describe('Response structure validation', () => {
     it('agreements endpoint should return array structure', () => {
       // Mock response from GET /api/agreements
-      const mockResponse = []
+      const mockResponse: any[] = []
 
       expect(Array.isArray(mockResponse)).toBe(true)
       // Should be array, not wrapped object like {agreements: [...]}
@@ -19,7 +19,7 @@ describe('API Response Format Verification', () => {
 
     it('breaches endpoint should return array structure', () => {
       // Mock response from GET /api/breaches
-      const mockResponse = []
+      const mockResponse: any[] = []
 
       expect(Array.isArray(mockResponse)).toBe(true)
       // Should be array, not wrapped object like {breaches: [...], pagination}
@@ -27,7 +27,7 @@ describe('API Response Format Verification', () => {
 
     it('evaluations endpoint should return array structure', () => {
       // Mock response from GET /api/evaluations
-      const mockResponse = []
+      const mockResponse: any[] = []
 
       expect(Array.isArray(mockResponse)).toBe(true)
       // Should be array, not wrapped object like {evaluations: [...], pagination}
@@ -73,14 +73,14 @@ describe('API Response Format Verification', () => {
   describe('Nested routes structure', () => {
     it('GET /api/agreements/:id/evaluations should return array', () => {
       // Mock response from nested route
-      const mockResponse = []
+      const mockResponse: any[] = []
 
       expect(Array.isArray(mockResponse)).toBe(true)
     })
 
     it('GET /api/agreements/:id/breaches should return array', () => {
       // Mock response from nested route
-      const mockResponse = []
+      const mockResponse: any[] = []
 
       expect(Array.isArray(mockResponse)).toBe(true)
     })

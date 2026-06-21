@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest'
-import Fastify from 'fastify'
+import Fastify, { FastifyRequest, FastifyReply } from 'fastify'
 import { createClient } from '@supabase/supabase-js'
 import 'dotenv/config'
 
@@ -25,6 +25,37 @@ describe('API Integration Tests', () => {
   beforeAll(async () => {
     // Setup Fastify app
     app = Fastify()
+
+    // Register auth middleware hook for all routes
+    app.addHook('preHandler', async (request: FastifyRequest, reply: FastifyReply) => {
+      // Mock auth context for tests
+      const authHeader = request.headers.authorization
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        const token = authHeader.substring(7)
+
+        // Validate token with Supabase
+        const { data: { user }, error } = await supabaseAdmin.auth.getUser(token)
+        if (user && !error) {
+          const { data: profile } = await supabaseAdmin
+            .from('profiles')
+            .select('org_id, role')
+            .eq('id', user.id)
+            .single()
+
+          if (profile) {
+            request.auth = {
+              userId: user.id,
+              orgId: profile.org_id,
+              role: profile.role
+            }
+            return
+          }
+        }
+      }
+
+      // No valid auth - routes will handle 401
+      return reply.code(401).send({ error: 'Unauthorized' })
+    })
 
     // Register routes
     app.register(providersRoutes, { prefix: '/api' })
@@ -56,7 +87,8 @@ describe('API Integration Tests', () => {
     // Create profile
     await supabaseAdmin.from('profiles').insert({
       id: userId,
-      org_id: orgId
+      org_id: orgId,
+      role: 'owner'
     })
 
     // Sign in to get token
