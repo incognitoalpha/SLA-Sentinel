@@ -52,8 +52,10 @@ export async function probeEndpoint(
     clearTimeout(timeoutId)
     const latencyMs = Math.round(performance.now() - startTime)
 
-    const success = response.status === expectedStatus
-    const errorMessage = success ? null : `Expected ${expectedStatus}, got ${response.status}`
+    // Ensure both values are numbers for comparison
+    const expectedStatusNum = Number(expectedStatus)
+    const success = response.status === expectedStatusNum
+    const errorMessage = success ? null : `Expected ${expectedStatusNum}, got ${response.status}`
 
     return {
       endpointId,
