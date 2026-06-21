@@ -25,7 +25,8 @@
       "Bash(chmod +x setup-supabase.sh verify-setup.sh)",
       "Bash(node -e ' *)",
       "Bash(cd *)",
-      "Bash(env)"
+      "Bash(env)",
+      "Bash(gh run *)"
     ]
   },
   "enableAllProjectMcpServers": true,
