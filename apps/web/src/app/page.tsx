@@ -46,34 +46,42 @@ export default function HomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="bg-canvas-elevated border border-hairline-border rounded-card p-8">
-          <h1 className="text-2xl font-semibold text-ink tracking-tight mb-2">
-            Sign in to SLA Sentinel
-          </h1>
-          <p className="text-sm text-muted-text mb-6">
-            Monitor your third-party APIs with testnet escrow enforcement
-          </p>
+    <div className="relative min-h-screen bg-canvas flex items-center justify-center px-4 overflow-hidden">
+      {/* Background animated blobs with blend mode adjustments for light vs dark */}
+      <div className="absolute top-0 -left-4 w-96 h-96 bg-link/10 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-70 dark:opacity-40 animate-blob"></div>
+      <div className="absolute top-0 -right-4 w-96 h-96 bg-success/10 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-70 dark:opacity-40 animate-blob animation-delay-2000"></div>
+      <div className="absolute -bottom-8 left-20 w-96 h-96 bg-warning/10 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-70 dark:opacity-40 animate-blob animation-delay-4000"></div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="w-full max-w-md relative z-10 my-8">
+        <div className="glass-panel rounded-panel p-10 border border-hairline-border/80 shadow-xl transition-all duration-300">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-extrabold text-ink tracking-tight mb-3">
+              SLA Sentinel
+            </h1>
+            <p className="text-sm text-body-text leading-relaxed">
+              Monitor your third-party APIs with <br/>
+              <span className="font-semibold text-ink">testnet escrow enforcement</span>
+            </p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-ink mb-2">
-                Email
+              <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-widest text-muted-text mb-2">
+                Email Address
               </label>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-3 py-2 border border-hairline-border rounded bg-canvas-elevated text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent"
+                className="w-full px-4 py-3 border border-hairline-border rounded-card bg-canvas-elevated/50 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent transition-all shadow-sm"
                 placeholder="you@example.com"
                 required
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-ink mb-2">
+              <label htmlFor="password" className="block text-[10px] font-bold uppercase tracking-widest text-muted-text mb-2">
                 Password
               </label>
               <input
@@ -81,37 +89,44 @@ export default function HomePage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-hairline-border rounded bg-canvas-elevated text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent"
+                className="w-full px-4 py-3 border border-hairline-border rounded-card bg-canvas-elevated/50 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent transition-all shadow-sm"
                 placeholder="••••••••"
                 required
               />
             </div>
 
             {error && (
-              <div className="p-3 bg-error/10 border border-error/20 rounded text-sm text-error">
-                {error}
+              <div className="p-4 bg-error/10 border border-error/20 rounded-card text-xs font-semibold text-error flex items-center gap-2.5">
+                <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 stroke-current shrink-0" strokeWidth="2.5">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>{error}</span>
               </div>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-4 py-2.5 bg-ink text-on-primary font-medium text-sm rounded-pill hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="w-full mt-2 px-4 py-3.5 bg-ink text-on-primary font-bold text-sm rounded-pill hover:opacity-90 hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:hover:shadow-none focus:outline-none focus:ring-2 focus:ring-link focus:ring-offset-2 focus:ring-offset-canvas-elevated"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          <p className="mt-6 text-center text-sm text-muted-text">
-            Don&apos;t have an account?{' '}
-            <Link href="/signup" className="text-link hover:underline">
-              Sign up
-            </Link>
-          </p>
-
-          <p className="mt-4 text-center text-xs text-faint-text">
-            Testnet only • Sepolia deployment
-          </p>
+          <div className="mt-8 pt-6 border-t border-hairline-border/80 text-center">
+            <p className="text-sm text-body-text">
+              Don&apos;t have an account?{' '}
+              <Link href="/signup" className="text-link font-semibold hover:underline transition-all">
+                Sign up
+              </Link>
+            </p>
+            <div className="mt-5 inline-flex items-center justify-center px-4 py-1.5 bg-canvas/80 border border-hairline-border rounded-full shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-warning animate-pulse mr-2.5"></span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-text font-bold">Testnet Only • Sepolia</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

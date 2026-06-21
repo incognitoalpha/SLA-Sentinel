@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,18 +10,18 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: '#171717',
-        'on-primary': '#ffffff',
-        'body-text': '#4d4d4d',
-        'muted-text': '#8f8f8f',
-        'faint-text': '#a1a1a1',
-        'hairline-border': '#ebebeb',
-        canvas: '#fafafa',
-        'canvas-elevated': '#ffffff',
-        link: '#0070f3',
-        error: '#ee0000',
-        warning: '#f5a623',
-        success: '#17c964',
+        ink: 'rgb(var(--ink) / <alpha-value>)',
+        'on-primary': 'rgb(var(--on-primary) / <alpha-value>)',
+        'body-text': 'rgb(var(--body-text) / <alpha-value>)',
+        'muted-text': 'rgb(var(--muted-text) / <alpha-value>)',
+        'faint-text': 'rgb(var(--faint-text) / <alpha-value>)',
+        'hairline-border': 'rgb(var(--hairline-border) / <alpha-value>)',
+        canvas: 'rgb(var(--canvas) / <alpha-value>)',
+        'canvas-elevated': 'rgb(var(--canvas-elevated) / <alpha-value>)',
+        link: 'rgb(var(--link) / <alpha-value>)',
+        error: 'rgb(var(--error) / <alpha-value>)',
+        warning: 'rgb(var(--warning) / <alpha-value>)',
+        success: 'rgb(var(--success) / <alpha-value>)',
       },
       fontFamily: {
         sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],

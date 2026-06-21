@@ -96,27 +96,36 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-canvas flex items-center justify-center px-4">
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-semibold text-ink tracking-tight mb-2">
-            Create Account
-          </h1>
-          <p className="text-muted-text">
-            Start monitoring your SLA agreements with automated escrow enforcement
-          </p>
-        </div>
+    <div className="relative min-h-screen bg-canvas flex items-center justify-center px-4 overflow-hidden">
+      {/* Background animated blobs */}
+      <div className="absolute top-0 -left-4 w-96 h-96 bg-link/10 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-60 dark:opacity-30 animate-blob"></div>
+      <div className="absolute top-0 -right-4 w-96 h-96 bg-success/10 rounded-full mix-blend-multiply dark:mix-blend-normal filter blur-3xl opacity-60 dark:opacity-30 animate-blob animation-delay-2000"></div>
 
-        <div className="bg-canvas-elevated border border-hairline-border rounded-card p-8">
+      <div className="w-full max-w-md relative z-10 my-8">
+        <div className="glass-panel rounded-panel p-10 border border-hairline-border/80 shadow-xl transition-all duration-300">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-extrabold text-ink tracking-tight mb-3">
+              SLA Sentinel
+            </h1>
+            <p className="text-sm text-body-text leading-relaxed">
+              Create an account to start monitoring your API SLAs
+            </p>
+          </div>
+
           {error && (
-            <div className="mb-6 p-4 bg-error/10 border border-error/20 rounded text-sm text-error">
-              {error}
+            <div className="mb-6 p-4 bg-error/10 border border-error/20 rounded-card text-xs font-semibold text-error flex items-center gap-2.5">
+              <svg viewBox="0 0 24 24" fill="none" className="w-4 h-4 stroke-current shrink-0" strokeWidth="2.5">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="8" x2="12" y2="12"></line>
+                <line x1="12" y1="16" x2="12.01" y2="16"></line>
+              </svg>
+              <span>{error}</span>
             </div>
           )}
 
-          <form onSubmit={handleSignup} className="space-y-4">
+          <form onSubmit={handleSignup} className="space-y-5">
             <div>
-              <label htmlFor="organization" className="block text-sm font-medium text-body-text mb-2">
+              <label htmlFor="organization" className="block text-[10px] font-bold uppercase tracking-widest text-muted-text mb-2">
                 Organization Name
               </label>
               <input
@@ -126,15 +135,12 @@ export default function SignupPage() {
                 onChange={(e) => setOrganizationName(e.target.value)}
                 required
                 placeholder="Acme Corp"
-                className="w-full px-4 py-2 bg-canvas border border-hairline-border rounded text-ink focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent"
+                className="w-full px-4 py-3 border border-hairline-border rounded-card bg-canvas-elevated/50 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent transition-all shadow-sm"
               />
-              <p className="mt-1 text-xs text-muted-text">
-                Your company or organization name
-              </p>
             </div>
 
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-body-text mb-2">
+              <label htmlFor="email" className="block text-[10px] font-bold uppercase tracking-widest text-muted-text mb-2">
                 Email
               </label>
               <input
@@ -144,12 +150,12 @@ export default function SignupPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 placeholder="you@example.com"
-                className="w-full px-4 py-2 bg-canvas border border-hairline-border rounded text-ink focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent"
+                className="w-full px-4 py-3 border border-hairline-border rounded-card bg-canvas-elevated/50 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent transition-all shadow-sm"
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-body-text mb-2">
+              <label htmlFor="password" className="block text-[10px] font-bold uppercase tracking-widest text-muted-text mb-2">
                 Password
               </label>
               <input
@@ -160,15 +166,15 @@ export default function SignupPage() {
                 required
                 placeholder="••••••••"
                 minLength={6}
-                className="w-full px-4 py-2 bg-canvas border border-hairline-border rounded text-ink focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent"
+                className="w-full px-4 py-3 border border-hairline-border rounded-card bg-canvas-elevated/50 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent transition-all shadow-sm"
               />
-              <p className="mt-1 text-xs text-muted-text">
-                At least 6 characters
+              <p className="mt-1.5 text-[10px] font-semibold text-muted-text">
+                Must be at least 6 characters
               </p>
             </div>
 
             <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium text-body-text mb-2">
+              <label htmlFor="confirmPassword" className="block text-[10px] font-bold uppercase tracking-widest text-muted-text mb-2">
                 Confirm Password
               </label>
               <input
@@ -179,37 +185,33 @@ export default function SignupPage() {
                 required
                 placeholder="••••••••"
                 minLength={6}
-                className="w-full px-4 py-2 bg-canvas border border-hairline-border rounded text-ink focus:outline-none focus:ring-2 focus:ring-ink focus:border-transparent"
+                className="w-full px-4 py-3 border border-hairline-border rounded-card bg-canvas-elevated/50 text-ink text-sm focus:outline-none focus:ring-2 focus:ring-link focus:border-transparent transition-all shadow-sm"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full px-6 py-3 bg-ink text-on-primary font-medium text-sm rounded hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full mt-4 px-4 py-3.5 bg-ink text-on-primary font-bold text-sm rounded-pill hover:opacity-90 hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-link focus:ring-offset-2 focus:ring-offset-canvas-elevated"
             >
               {loading ? 'Creating Account...' : 'Create Account'}
             </button>
           </form>
 
-          <div className="mt-6 text-center">
-            <p className="text-sm text-muted-text">
+          <div className="mt-8 pt-6 border-t border-hairline-border/80 text-center">
+            <p className="text-sm text-body-text">
               Already have an account?{' '}
               <button
                 onClick={() => router.push('/login')}
-                className="text-link hover:underline"
+                className="text-link font-semibold hover:underline transition-all focus:outline-none"
               >
                 Sign in
               </button>
             </p>
-          </div>
-
-          <div className="mt-6 pt-6 border-t border-hairline-border">
-            <p className="text-xs text-faint-text text-center">
-              ⚠️ This platform uses Sepolia testnet for escrow enforcement.
-              <br />
-              No real funds are involved.
-            </p>
+            <div className="mt-5 inline-flex items-center justify-center px-4 py-1.5 bg-canvas/80 border border-hairline-border rounded-full shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-warning animate-pulse mr-2.5"></span>
+              <span className="text-[10px] uppercase tracking-wider text-muted-text font-bold">Testnet Only • Sepolia</span>
+            </div>
           </div>
         </div>
       </div>

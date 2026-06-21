@@ -124,32 +124,37 @@ export default function BreachesPage() {
     <div className="min-h-screen bg-canvas">
       <NavBar orgName={orgName} onLogout={handleLogout} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="mb-8">
-          <h1 className="text-3xl font-semibold text-ink tracking-tight mb-2">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+        <div className="mb-10">
+          <h1 className="text-4xl font-extrabold text-ink tracking-tight mb-3">
             SLA Breaches
           </h1>
-          <p className="text-muted-text">
-            Track all detected breaches across your monitored agreements
+          <p className="text-body-text text-lg max-w-2xl font-medium">
+            Track all detected breaches across your monitored agreements.
           </p>
         </div>
 
         {error && (
-          <div className="mb-6 p-4 bg-error/10 border border-error/20 rounded text-sm text-error">
+          <div className="mb-8 p-4 bg-error/10 border border-error/20 rounded-panel text-xs font-semibold text-error flex items-center gap-3">
+            <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5 stroke-current" strokeWidth="2.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="8" x2="12" y2="12"></line>
+              <line x1="12" y1="16" x2="12.01" y2="16"></line>
+            </svg>
             {error}
           </div>
         )}
 
         {/* Filter tabs */}
-        <div className="flex gap-2 mb-6">
+        <div className="flex flex-wrap gap-2.5 mb-8">
           {(['all', 'unresolved', 'resolved'] as const).map((f) => (
             <button
               key={f}
               onClick={() => setFilter(f)}
-              className={`px-4 py-2 text-sm font-medium rounded transition-colors ${
+              className={`px-5 py-2.5 text-[10px] font-bold uppercase tracking-widest rounded-pill border transition-all ${
                 filter === f
-                  ? 'bg-ink text-on-primary'
-                  : 'bg-canvas-elevated border border-hairline-border text-body-text hover:border-ink'
+                  ? 'bg-ink border-transparent text-on-primary shadow-sm'
+                  : 'bg-canvas-elevated/40 border-hairline-border/80 text-muted-text hover:text-ink hover:border-hairline-border hover:bg-canvas-elevated/80'
               }`}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -158,62 +163,62 @@ export default function BreachesPage() {
         </div>
 
         {filteredBreaches.length === 0 ? (
-          <div className="text-center py-16">
-            <p className="text-2xl font-semibold text-ink tracking-tight mb-2">
+          <div className="text-center py-20 glass-panel rounded-panel border border-hairline-border/80 shadow-md">
+            <h2 className="text-2xl font-bold text-ink tracking-tight mb-3">
               {filter === 'all' ? 'No breaches detected' : `No ${filter} breaches`}
-            </p>
-            <p className="text-muted-text mb-6">
+            </h2>
+            <p className="text-body-text font-medium max-w-md mx-auto leading-relaxed">
               {filter === 'all'
-                ? 'All SLA agreements are currently meeting their thresholds'
-                : 'Check the other filter tabs to see breaches'}
+                ? 'All SLA agreements are currently meeting their uptime and latency thresholds.'
+                : 'Check the other filter tabs to see breaches.'}
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {filteredBreaches.map((breach) => (
               <div
                 key={breach.id}
-                className="bg-canvas-elevated border-l-4 border-error rounded-card p-6 hover:shadow-sm transition-shadow"
+                className="glass-panel border-l-4 border-error border-y border-r border-hairline-border/80 rounded-panel p-6 hover:shadow-md transition-all duration-300 relative overflow-hidden"
               >
-                <div className="flex items-start justify-between mb-3">
+                <div className="flex items-start justify-between mb-4 relative z-10">
                   <div>
-                    <div className="text-xs font-mono uppercase text-muted-text mb-1">
-                      {new Date(breach.notified_at).toLocaleDateString()} •{' '}
+                    <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-text mb-2">
+                      {new Date(breach.notified_at).toLocaleDateString()} &bull;{' '}
                       {new Date(breach.notified_at).toLocaleTimeString()}
                     </div>
                     {breach.agreement && (
                       <button
                         onClick={() => router.push(`/agreements/${breach.agreement!.id}`)}
-                        className="text-lg font-semibold text-ink tracking-tight hover:text-link transition-colors"
+                        className="text-xl font-bold text-ink tracking-tight hover:text-link transition-colors duration-250 text-left"
                       >
                         {breach.agreement.name}
                       </button>
                     )}
-                    <p className="text-sm text-muted-text mt-1">
+                    <p className="text-sm font-semibold text-muted-text mt-1.5">
                       {breach.agreement?.provider_name || 'Unknown Provider'}
                     </p>
                   </div>
                   {breach.resolved && (
-                    <span className="text-xs font-medium text-success bg-success/10 px-3 py-1 rounded">
-                      ✓ Resolved
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-success bg-success/10 border border-success/20 px-3 py-1 rounded-full">
+                      Resolved
                     </span>
                   )}
                 </div>
 
-                <div className="mb-3">
-                  <p className="text-sm text-body-text">{breach.reason}</p>
+                <div className="mb-4 relative z-10">
+                  <p className="text-sm font-medium text-body-text leading-relaxed">{breach.reason}</p>
                 </div>
 
                 {breach.on_chain_tx_hash && (
-                  <div className="pt-3 border-t border-hairline-border">
-                    <div className="text-xs font-mono uppercase text-muted-text mb-1">
+                  <div className="pt-4 border-t border-hairline-border/50 relative z-10">
+                    <div className="text-[10px] font-mono font-bold uppercase tracking-wider text-muted-text/80 mb-2">
                       ON-CHAIN SETTLEMENT (SEPOLIA TESTNET)
                     </div>
                     <a
                       href={`https://sepolia.etherscan.io/tx/${breach.on_chain_tx_hash}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-link hover:underline font-mono break-all"
+                      className="text-sm text-link hover:underline font-mono font-semibold break-all inline-block"
                     >
                       {breach.on_chain_tx_hash}
                     </a>
