@@ -8,6 +8,9 @@ import agreementsRoutes from './routes/agreements.js'
 import evaluationsRoutes from './routes/evaluations.js'
 import breachesRoutes from './routes/breaches.js'
 import demoRoutes from './routes/demo.js'
+import { runProbes } from './worker/scheduler.js'
+import { runEvaluations } from './evaluator/evaluation-job.js'
+import cron from 'node-cron'
 
 const fastify = Fastify({
   logger: true
@@ -36,6 +39,36 @@ const start = async () => {
   try {
     const port = Number(process.env.PORT) || 3001
     await fastify.listen({ port, host: '0.0.0.0' })
+
+    // Start background jobs if enabled (for free tier deployment)
+    if (process.env.ENABLE_BACKGROUND_JOBS === 'true') {
+      fastify.log.info('Background jobs enabled')
+
+      const workerSchedule = process.env.WORKER_SCHEDULE_CRON || '*/5 * * * *'
+      const evaluatorSchedule = process.env.EVALUATOR_SCHEDULE_CRON || '0 * * * *'
+
+      // Schedule worker (probes)
+      cron.schedule(workerSchedule, async () => {
+        fastify.log.info('Running scheduled worker job...')
+        try {
+          await runProbes()
+        } catch (error) {
+          fastify.log.error('Worker job failed:', error)
+        }
+      })
+      fastify.log.info(`Worker scheduled: ${workerSchedule}`)
+
+      // Schedule evaluator
+      cron.schedule(evaluatorSchedule, async () => {
+        fastify.log.info('Running scheduled evaluator job...')
+        try {
+          await runEvaluations()
+        } catch (error) {
+          fastify.log.error('Evaluator job failed:', error)
+        }
+      })
+      fastify.log.info(`Evaluator scheduled: ${evaluatorSchedule}`)
+    }
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)

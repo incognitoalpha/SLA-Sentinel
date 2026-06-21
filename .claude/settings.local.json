@@ -26,7 +26,10 @@
       "Bash(node -e ' *)",
       "Bash(cd *)",
       "Bash(env)",
-      "Bash(gh run *)"
+      "Bash(gh run *)",
+      "Bash(npx hardhat *)",
+      "Bash(node -e \"const ethers = require\\('ethers'\\); const provider = new ethers.JsonRpcProvider\\('https://sepolia.infura.io/v3/1d82b0ae0ab7400c83f463fe32fbb01f'\\); provider.getBalance\\('0xF040250f6FCeeFA78d00fBac80F868B07B63A7C0'\\).then\\(b => console.log\\('Balance:', ethers.formatEther\\(b\\), 'ETH'\\)\\)\")",
+      "Bash(node *)"
     ]
   },
   "enableAllProjectMcpServers": true,
