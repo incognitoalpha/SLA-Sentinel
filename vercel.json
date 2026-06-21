@@ -4,11 +4,6 @@
   "installCommand": "pnpm install",
   "framework": "nextjs",
   "outputDirectory": "apps/web/.next",
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "NEXT_PUBLIC_API_BASE_URL": "@api_base_url"
-  },
   "build": {
     "env": {
       "NEXT_TELEMETRY_DISABLED": "1"
